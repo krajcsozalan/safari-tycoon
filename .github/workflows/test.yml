@@ -16,7 +16,7 @@ jobs:
           path: Library
           key: Library-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-${{ os.runner }}
+            Library-${{ runner.os }}
       - name: Run tests
         uses: game-ci/unity-test-runner@v4
         env:
