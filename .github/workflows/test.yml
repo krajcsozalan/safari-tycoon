@@ -1,0 +1,37 @@
+name: Run tests
+on:
+  pull_request:
+    branches: main
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: Cache Library folder
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-${{ runner.os }}
+      - name: Run tests
+        id: testStep
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{ steps.testStep.outputs.artifactsPath }}
+          name: Test results
+      - name: Upload coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{ steps.testStep.outputs.coveragePath }}
+          name: Coverage results
+
