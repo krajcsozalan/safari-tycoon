@@ -27,7 +27,7 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ steps.testStep.outputs.artifactPath }}
+          path: ${{ steps.testStep.outputs.artifactsPath }}
           name: Test results
       - name: Upload coverage results
         uses: actions/upload-artifact@v4
