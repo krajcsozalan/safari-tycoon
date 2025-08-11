@@ -20,42 +20,37 @@ using SafariTycoon.Model;
 
 namespace SafariTycoon.Controllers
 {
-	[ExecuteAlways]
 	public class WorldScript : MonoBehaviour
 	{
 		[Header("References")]
 		[SerializeField] private GameObject m_ChunkPrefab;
 
-		public World World { get; private set; }
-		public AsyncInstantiateOperation GenerationOperation { get; private set; }
-
-
 		[Header("Options")]
 		[SerializeField] private uint m_Size;
-		[SerializeField] private uint m_Seed;
 
 		public uint Size => m_Size;
 
+		public World World { get; private set; }
+		public AsyncInstantiateOperation GenerationOperation { get; private set; }
+
 		public void Awake()
 		{
-			Generate(m_Size, m_Seed);
+			Generate();
 		}
 
 		public void Generate()
 		{
-			Generate(m_Size, m_Seed);
+			Generate(m_Size, m_ChunkPrefab.GetComponent<ChunkScript>().Size);
 		}
 
-		public void Generate(uint size, uint seed)
+		public void Generate(uint size, uint chunkSize)
 		{
 			DestroyChildren();
 
-			World = new World(size);
+			World = new World(size, chunkSize);
+			World.Generate(new WorldGenerator());
 
-			ChunkScript.ID = 0;
-			GenerationOperation = InstantiateAsync(m_ChunkPrefab, (int)(size * size), transform);
-
-			GenerationOperation.completed += (AsyncOperation _) => World.Generate(new WorldGenerator(seed));
+			GenerationOperation = InstantiateAsync(m_ChunkPrefab, World.Chunks.GetLength(0) * World.Chunks.GetLength(1), transform);
 		}
 
 		public void CancelGeneration()
@@ -76,13 +71,6 @@ namespace SafariTycoon.Controllers
 
 	public class WorldGenerator : IWorldGenerator
 	{
-		private uint m_Seed;
-
-		public WorldGenerator(uint seed)
-		{
-			m_Seed = seed;
-		}
-
 		public float GetHeight(uint x, uint z)
 		{
 			return 0f;

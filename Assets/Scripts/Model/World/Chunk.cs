@@ -23,29 +23,23 @@ namespace SafariTycoon.Model
 		public uint Z { get; private set; }
 		public float[,] HeightMap { get; private set; }
 
-		#nullable enable
-		public delegate void ChunkGenerationCompleteEventHandler(object? sender);
-		public event ChunkGenerationCompleteEventHandler GenerationComplete;
-		#nullable disable
-
-		public Chunk(uint size, uint x, uint z) {
+		public Chunk(uint size, uint x, uint z)
+		{
 			Size = size;
 			X = x;
 			Z = z;
-			HeightMap = new float[Size, Size];
+			HeightMap = new float[Size + 1, Size + 1];
 		}
 
 		public void Generate(IWorldGenerator generator)
 		{
-			for (uint i = 0; i < Size; ++i)
+			for (uint i = 0; i <= Size; ++i)
 			{
-				for (uint j = 0; j < Size; ++j)
+				for (uint j = 0; j <= Size; ++j)
 				{
 					HeightMap[i, j] = generator.GetHeight(X * Size + i, Z * Size + j);
 				}
 			}
-
-			GenerationComplete?.Invoke(this);
 		}
-	}
+    }
 }

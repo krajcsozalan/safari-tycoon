@@ -21,15 +21,18 @@ namespace SafariTycoon.Model
 		public uint Size { get; private set; }
 		public Chunk[,] Chunks { get; private set; }
 
-		#nullable enable
-		public delegate void WorldGenerationCompleteEventHandler(object? sender);
-		public event WorldGenerationCompleteEventHandler GenerationComplete;
-		#nullable disable
-
-		public World(uint size)
+		public World(uint size, uint chunkSize)
 		{
 			Size = size;
 			Chunks = new Chunk[Size, Size];
+
+			for (uint i = 0; i < Size; ++i)
+			{
+				for (uint j = 0; j < Size; ++j)
+				{
+					Chunks[i, j] = new Chunk(chunkSize, i, j);
+				}
+			}
 		}
 
 		public void Generate(IWorldGenerator generator)
@@ -41,8 +44,6 @@ namespace SafariTycoon.Model
 					Chunks[i, j].Generate(generator);
 				}
 			}
-
-			GenerationComplete?.Invoke(this);
 		}
 	}
 }

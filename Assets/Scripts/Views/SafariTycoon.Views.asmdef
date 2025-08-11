@@ -1,0 +1,17 @@
+{
+    "name": "SafariTycoon.Views",
+    "rootNamespace": "SafariTycoon.Views",
+    "references": [
+        "GUID:ca5e59357a6b3bf38acbbc5438bce01f",
+        "GUID:5a85dfe4b9f890804bfbe1ff3ff1fd2e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

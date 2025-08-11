@@ -16,37 +16,13 @@
  */
 using UnityEngine;
 
-using SafariTycoon.Model;
-
 namespace SafariTycoon.Controllers
 {
-	[ExecuteAlways]
 	public class ChunkScript : MonoBehaviour
 	{
-		private WorldScript m_WorldScript;
-
-		public Chunk Chunk { get; private set; }
-
 		[Header("Options")]
 		[SerializeField] private uint m_Size;
-		public static uint ID;
 
 		public uint Size => m_Size;
-
-		public void Awake()
-		{
-			m_WorldScript = GetComponentInParent<WorldScript>();
-
-			uint x = ID % m_WorldScript.Size;
-			uint z = ID / m_WorldScript.Size;
-
-			transform.localPosition = new Vector3(x, 0f, z) * m_Size;
-			name = $"Chunk ({x}, {z})";
-
-			Chunk = new Chunk(m_Size, x, z);
-			m_WorldScript.World.Chunks[x, z] = Chunk;
-
-			++ID;
-		}
 	}
 }
