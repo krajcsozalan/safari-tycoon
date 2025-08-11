@@ -1,18 +1,19 @@
 {
-    "plugins": [
-        "@semantic-release/commit-analyzer",
-        "@semantic-release/release-notes-generator",
-        [
-            "@semantic-release/github",
-            {
-                "assets": [
-                    { "path": "*.zip" }
-                ],
-                "successComment": false,
-                "releasedLabels": false,
-                "labels": false
-            }
-        ]
-    ]
+	"plugins": [
+		"@semantic-release/commit-analyzer",
+		"@semantic-release/release-notes-generator",
+		[
+			"@semantic-release/github",
+			{
+				"assets": [
+					{
+						"path": "*.zip"
+					}
+				],
+				"successComment": false,
+				"releasedLabels": false,
+				"labels": false
+			}
+		]
+	]
 }
-

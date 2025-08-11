@@ -60,4 +60,3 @@ jobs:
           npx semantic-release@24
         env:
           GH_TOKEN: ${{ github.token }}
-
