@@ -27,6 +27,8 @@ namespace SafariTycoon.Controllers
 
 		[Header("Options")]
 		[SerializeField] private uint m_Size;
+		[SerializeField] private uint m_Seed;
+		[SerializeField] private WorldGenerationConfig m_Config;
 
 		public uint Size => m_Size;
 
@@ -40,15 +42,20 @@ namespace SafariTycoon.Controllers
 
 		public void Generate()
 		{
-			Generate(m_Size, m_ChunkPrefab.GetComponent<ChunkScript>().Size);
+			Generate(m_Seed);
 		}
 
-		public void Generate(uint size, uint chunkSize)
+		public void Generate(uint seed)
+		{
+			Generate(m_Size, m_ChunkPrefab.GetComponent<ChunkScript>().Size, seed);
+		}
+
+		public void Generate(uint size, uint chunkSize, uint seed)
 		{
 			DestroyChildren();
 
 			World = new World(size, chunkSize);
-			World.Generate(new WorldGenerator());
+			World.Generate(new WorldGenerator(seed, m_Config));
 
 			GenerationOperation = InstantiateAsync(m_ChunkPrefab, World.Chunks.GetLength(0) * World.Chunks.GetLength(1), transform);
 		}
@@ -66,14 +73,6 @@ namespace SafariTycoon.Controllers
 			{
 				DestroyImmediate(transform.GetChild(i).gameObject);
 			}
-		}
-	}
-
-	public class WorldGenerator : IWorldGenerator
-	{
-		public float GetHeight(uint x, uint z)
-		{
-			return 0f;
 		}
 	}
 }

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad56fd51e02edda599633acdc4fdeb8f, type: 3}
+  m_Name: WorldGenerationConfig
+  m_EditorClassIdentifier: 
+  Layers:
+  - weight: 32
+    bias: -8
+    smoothness: 32
+  - weight: 8
+    bias: -4
+    smoothness: 16
+  - weight: 4
+    bias: -2
+    smoothness: 8
+  - weight: 2
+    bias: -1
+    smoothness: 4
+  - weight: 1
+    bias: 0
+    smoothness: 2
+  - weight: 0.5
+    bias: 0
+    smoothness: 1
