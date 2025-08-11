@@ -1,0 +1,16 @@
+{
+    "name": "SafariTycoon.Controllers",
+    "rootNamespace": "SafariTycoon.Controllers",
+    "references": [
+        "GUID:ca5e59357a6b3bf38acbbc5438bce01f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
