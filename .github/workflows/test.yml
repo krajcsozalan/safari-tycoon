@@ -34,4 +34,3 @@ jobs:
         with:
           path: ${{ steps.testStep.outputs.coveragePath }}
           name: Coverage results
-
