@@ -17,8 +17,17 @@
 
 namespace SafariTycoon.Model
 {
+	/// <summary>
+	/// Generator used to calculate the height map for a <c>World</c> terrain
+	/// </summary>
 	public interface IWorldGenerator
 	{
+		/// <summary>
+		/// Calculates the height of the terrain at a given tile
+		/// </summary>
+		/// <param name="x">X coordinate of the tile (absolute)</param>
+		/// <param name="z">Z coordinate of the tile (absolute)</param>
+		/// <returns>Y coordinate of the tile (with 0 being sea level)</returns>
 		public float GetHeight(uint x, uint z);
 	}
 }

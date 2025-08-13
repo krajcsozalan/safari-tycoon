@@ -19,14 +19,36 @@ using System.Threading.Tasks;
 
 namespace SafariTycoon.Model
 {
+	/// <summary>
+	/// Represents a game world, including <c>Chunk</c>s
+	/// </summary>
 	public class World : ITickable
 	{
+		/// <summary>
+		/// Side length of the <c>World</c> (in <c>Chunk</c>s)
+		/// </summary>
 		public uint Size { get; private set; }
+
+		/// <summary>
+		/// Contains the <c>Chunk</c>s that make up the <c>World</c>
+		/// </summary>
 		public Chunk[,] Chunks { get; private set; }
 
+		/// <summary>
+		/// Invoked after terrain generation has finished
+		/// </summary>
 		public event EventHandler OnGenerationComplete;
+
+		/// <summary>
+		/// Invoked after the <c>World</c> (including <c>Chunk</c>s) has been ticked
+		/// </summary>
 		public event EventHandler OnTick;
 
+		/// <summary>
+		/// Constructs a new world with a valid (however unplayable) state
+		/// </summary>
+		/// <param name="size">Side length of the <c>World</c> (in <c>Chunk</c>s)</param>
+		/// <param name="chunkSize">Side length of <c>Chunk</c>s (in tiles)</param>
 		public World(uint size, uint chunkSize)
 		{
 			Size = size;
@@ -41,6 +63,10 @@ namespace SafariTycoon.Model
 			}
 		}
 
+		/// <summary>
+		/// Generates the terrain of the <c>World</c>
+		/// </summary>
+		/// <param name="generator">Generator used to calculate the terrain height map</param>
 		public void Generate(IWorldGenerator generator)
 		{
 			Task[] tasks = new Task[Size * Size];
@@ -59,6 +85,9 @@ namespace SafariTycoon.Model
 			OnGenerationComplete?.Invoke(this, EventArgs.Empty);
 		}
 
+		/// <summary>
+		/// Ticks the <c>World</c>, including <c>Chunk</c>s
+		/// </summary>
 		public void Tick()
 		{
 			foreach (Chunk chunk in Chunks)
