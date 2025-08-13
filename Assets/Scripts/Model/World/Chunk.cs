@@ -18,7 +18,7 @@ using System;
 
 namespace SafariTycoon.Model
 {
-	public class Chunk
+	public class Chunk : ITickable
 	{
 		public uint Size { get; private set; }
 		public uint X { get; private set; }
@@ -26,6 +26,7 @@ namespace SafariTycoon.Model
 		public float[,] HeightMap { get; private set; }
 
 		public event EventHandler OnGenerationComplete;
+		public event EventHandler OnTick;
 
 		public Chunk(uint size, uint x, uint z)
 		{
@@ -46,6 +47,11 @@ namespace SafariTycoon.Model
 			}
 
 			OnGenerationComplete?.Invoke(this, EventArgs.Empty);
+		}
+
+		public void Tick()
+		{
+			OnTick?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

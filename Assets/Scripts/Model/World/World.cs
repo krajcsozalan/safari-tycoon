@@ -19,12 +19,13 @@ using System.Threading.Tasks;
 
 namespace SafariTycoon.Model
 {
-	public class World
+	public class World : ITickable
 	{
 		public uint Size { get; private set; }
 		public Chunk[,] Chunks { get; private set; }
 
 		public event EventHandler OnGenerationComplete;
+		public event EventHandler OnTick;
 
 		public World(uint size, uint chunkSize)
 		{
@@ -56,6 +57,16 @@ namespace SafariTycoon.Model
 			Task.WaitAll(tasks);
 
 			OnGenerationComplete?.Invoke(this, EventArgs.Empty);
+		}
+
+		public void Tick()
+		{
+			foreach (Chunk chunk in Chunks)
+			{
+				chunk.Tick();
+			}
+
+			OnTick?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }
