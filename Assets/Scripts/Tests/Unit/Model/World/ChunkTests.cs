@@ -25,70 +25,70 @@ namespace SafariTycoon.Tests
 	public class ChunkTests
 	{
 		private static uint[] m_Sizes = { 0, 1, 2, 3, 5, 7, 8 };
+		private static float[] m_Heights = { float.NaN, -1f, -0.5f, 0f, 0.5f, 1f, 1024f };
 
 		[Test]
 		public void ConstructorTests([ValueSource(nameof(m_Sizes))] uint size)
 		{
-			World world = new World(1, size);
-			Chunk chunk = world.Chunks[0, 0];
+			World world = new World(size, size);
 
-			Assert.That(chunk.Size, Is.EqualTo(size));
-			Assert.That(chunk.HeightMap.GetLength(0), Is.EqualTo(size));
-			Assert.That(chunk.HeightMap.GetLength(1), Is.EqualTo(size));
-		}
-
-		private class ConstantWorldGenerator : IWorldGenerator
-		{
-			public float GetHeight(uint x, uint z)
+			foreach (Chunk chunk in world.Chunks)
 			{
-				return (float)Math.E;
+				Assert.That(chunk.Size, Is.EqualTo(size));
+				Assert.That(chunk.HeightMap.GetLength(0), Is.EqualTo(size));
+				Assert.That(chunk.HeightMap.GetLength(1), Is.EqualTo(size));
 			}
 		}
 
-		private class LinearWorldGenerator : IWorldGenerator
+		private class WorldGenerator : IWorldGenerator
 		{
+			private bool m_Constant;
+			private float m_Height;
+
+			public WorldGenerator(bool constant, float height = 0f)
+			{
+				m_Constant = constant;
+				m_Height = height;
+			}
+
 			public float GetHeight(uint x, uint z)
 			{
-				return x + z;
+				return m_Constant ? m_Height : (x + z);
 			}
 		}
 
 		[Test]
-		public void GenerateTests([ValueSource(nameof(m_Sizes))] uint size)
+		public void GenerateTests([ValueSource(nameof(m_Sizes))] uint size, [ValueSource(nameof(m_Heights))] float height)
 		{
 			World world = new World(size, size);
-			world.Generate(new ConstantWorldGenerator());
 
-			for (uint i = 0; i < world.Size; ++i)
+			// Test whether all chunks' events have been invoked before the world's event is invoked
+			bool[,] chunkEventCalled = new bool[world.Chunks.GetLength(0), world.Chunks.GetLength(1)];
+			foreach (Chunk chunk in world.Chunks)
 			{
-				for (uint j = 0; j < world.Size; ++j)
-				{
-					Chunk chunk = world.Chunks[i, j];
-
-					for (uint x = 0; x < chunk.Size; ++x)
-					{
-						for (uint z = 0; z < chunk.Size; ++z)
-						{
-							Assert.AreEqual((float)Math.E, chunk.HeightMap[x, z]);
-						}
-					}
-				}
+				chunk.OnGenerationComplete += (object sender, EventArgs _) => chunkEventCalled[(sender as Chunk).X, (sender as Chunk).Z] = true;
 			}
+			world.OnGenerationComplete += (object _, EventArgs _) => Assert.That(chunkEventCalled, Has.No.Member(false));
 
-			world.Generate(new LinearWorldGenerator());
+			// NaN represents flat terrain
+			world.Generate(new WorldGenerator(float.IsNaN(height), height));
 
-			for (uint i = 0; i < world.Size; ++i)
+			// Test for correct height map
+			foreach (Chunk chunk in world.Chunks)
 			{
-				for (uint j = 0; j < world.Size; ++j)
+				// NaN represents flat terrain
+				if (float.IsNaN(height))
 				{
-					Chunk chunk = world.Chunks[i, j];
+					Assert.That(chunk.HeightMap, Is.All.EqualTo(height));
 
-					for (uint x = 0; x < chunk.Size; ++x)
+					continue;
+				}
+				
+				for (uint x = 0; x < chunk.Size; ++x)
+				{
+					for (uint z = 0; z < chunk.Size; ++z)
 					{
-						for (uint z = 0; z < chunk.Size; ++z)
-						{
-							Assert.AreEqual(i * chunk.Size + x + j * chunk.Size + z, chunk.HeightMap[x, z]);
-						}
+						Assert.AreEqual(chunk.X * chunk.Size + x + chunk.Z * chunk.Size + z, chunk.HeightMap[x, z]);
 					}
 				}
 			}

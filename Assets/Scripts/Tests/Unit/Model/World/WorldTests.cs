@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+using System;
+
 using NUnit.Framework;
 
 using SafariTycoon.Model;
@@ -27,13 +29,35 @@ namespace SafariTycoon.Tests
 		[Test]
 		public void ConstructorTests([ValueSource(nameof(m_Sizes))] uint size)
 		{
-			World world = new World(size, 1);
+			World world = new World(size, size);
 
 			Assert.That(world.Size, Is.EqualTo(size));
 			Assert.That(world.Chunks.GetLength(0), Is.EqualTo(size));
 			Assert.That(world.Chunks.GetLength(1), Is.EqualTo(size));
 
 			Assert.That(world.Chunks, Has.No.Member(null));
+		}
+
+		private class WorldGenerator : IWorldGenerator
+		{
+			public float GetHeight(uint x, uint z)
+			{
+				return 0f;
+			}
+		}
+
+		[Test]
+		public void GenerateTest([ValueSource(nameof(m_Sizes))] uint size)
+		{
+			World world = new World(size, size);
+
+			// Pass test if world event is invoked
+			world.OnGenerationComplete += (object _, EventArgs _) => Assert.Pass();
+
+			world.Generate(new WorldGenerator());
+
+			// Fail test if world event hasn't been invoked
+			Assert.Fail();
 		}
 	}
 }
