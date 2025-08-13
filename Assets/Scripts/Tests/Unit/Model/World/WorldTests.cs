@@ -14,33 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+using NUnit.Framework;
 
-namespace SafariTycoon.Model
+using SafariTycoon.Model;
+
+namespace SafariTycoon.Tests
 {
-	public class Chunk
+	public class WorldTests
 	{
-		public uint Size { get; private set; }
-		public uint X { get; private set; }
-		public uint Z { get; private set; }
-		public float[,] HeightMap { get; private set; }
+		private static uint[] m_Sizes = { 0, 1, 2, 3, 5, 7, 8 };
 
-		public Chunk(uint size, uint x, uint z)
+		[Test]
+		public void ConstructorTests([ValueSource(nameof(m_Sizes))] uint size)
 		{
-			Size = size;
-			X = x;
-			Z = z;
-			HeightMap = new float[Size, Size];
-		}
+			World world = new World(size, 1);
 
-		public void Generate(IWorldGenerator generator)
-		{
-			for (uint i = 0; i < Size; ++i)
-			{
-				for (uint j = 0; j < Size; ++j)
-				{
-					HeightMap[i, j] = generator.GetHeight(X * Size + i, Z * Size + j);
-				}
-			}
+			Assert.That(world.Size, Is.EqualTo(size));
+			Assert.That(world.Chunks.GetLength(0), Is.EqualTo(size));
+			Assert.That(world.Chunks.GetLength(1), Is.EqualTo(size));
+
+			Assert.That(world.Chunks, Has.No.Member(null));
 		}
 	}
 }
