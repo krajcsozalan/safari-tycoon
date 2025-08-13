@@ -93,5 +93,21 @@ namespace SafariTycoon.Tests
 				}
 			}
 		}
+
+		[Test]
+		public void GenerateTests([ValueSource(nameof(m_Sizes))] uint size)
+		{
+			World world = new World(size, size);
+
+			// Test whether all chunks' events have been invoked before the world's event is invoked
+			bool[,] chunkEventCalled = new bool[world.Chunks.GetLength(0), world.Chunks.GetLength(1)];
+			foreach (Chunk chunk in world.Chunks)
+			{
+				chunk.OnTick += (object sender, EventArgs _) => chunkEventCalled[(sender as Chunk).X, (sender as Chunk).Z] = true;
+			}
+			world.OnTick += (object _, EventArgs _) => Assert.That(chunkEventCalled, Has.No.Member(false));
+
+			world.Tick();
+		}
 	}
 }

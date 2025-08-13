@@ -51,12 +51,26 @@ namespace SafariTycoon.Tests
 		{
 			World world = new World(size, size);
 
-			// Pass test if world event is invoked
+			// Pass test if the event is invoked
 			world.OnGenerationComplete += (object _, EventArgs _) => Assert.Pass();
 
 			world.Generate(new WorldGenerator());
 
-			// Fail test if world event hasn't been invoked
+			// Fail test if the event hasn't been invoked
+			Assert.Fail();
+		}
+
+		[Test]
+		public void TickTest()
+		{
+			World world = new World(1, 1);
+
+			// Pass test if the tick event is invoked
+			world.OnTick += (object _, EventArgs _) => Assert.Pass();
+
+			world.Tick();
+
+			// Fail test if the tick event hasn't been invoked
 			Assert.Fail();
 		}
 	}
