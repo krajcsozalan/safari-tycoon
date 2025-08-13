@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+using System;
+using System.Threading.Tasks;
 
 namespace SafariTycoon.Model
 {
@@ -21,6 +23,8 @@ namespace SafariTycoon.Model
 	{
 		public uint Size { get; private set; }
 		public Chunk[,] Chunks { get; private set; }
+
+		public event EventHandler OnGenerationComplete;
 
 		public World(uint size, uint chunkSize)
 		{
@@ -38,13 +42,20 @@ namespace SafariTycoon.Model
 
 		public void Generate(IWorldGenerator generator)
 		{
+			Task[] tasks = new Task[Size * Size];
+
 			for (uint i = 0; i < Size; ++i)
 			{
 				for (uint j = 0; j < Size; ++j)
 				{
-					Chunks[i, j].Generate(generator);
+					Chunk chunk = Chunks[i, j];
+					tasks[i * Size + j] = Task.Run(() => chunk.Generate(generator));
 				}
 			}
+
+			Task.WaitAll(tasks);
+
+			OnGenerationComplete?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

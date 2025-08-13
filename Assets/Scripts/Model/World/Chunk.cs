@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+using System;
 
 namespace SafariTycoon.Model
 {
@@ -23,6 +24,8 @@ namespace SafariTycoon.Model
 		public uint X { get; private set; }
 		public uint Z { get; private set; }
 		public float[,] HeightMap { get; private set; }
+
+		public event EventHandler OnGenerationComplete;
 
 		public Chunk(uint size, uint x, uint z)
 		{
@@ -41,6 +44,8 @@ namespace SafariTycoon.Model
 					HeightMap[i, j] = generator.GetHeight(X * Size + i, Z * Size + j);
 				}
 			}
+
+			OnGenerationComplete?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }
