@@ -2,9 +2,10 @@
     "name": "SafariTycoon",
     "rootNamespace": "SafariTycoon",
     "references": [
-        "GUID:19c3df1967929405fba735480b3da9a7",
+        "GUID:495c01f91bfc3fbd68b6122dfae7ded5",
         "GUID:7512af92bd6df13a987a2f2d113c16b6",
-        "GUID:d61df57d0d1109dc59081c70662fb9c3"
+        "GUID:d61df57d0d1109dc59081c70662fb9c3",
+        "GUID:7a421336f7b7f8205b90a4e9ac18b353"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
