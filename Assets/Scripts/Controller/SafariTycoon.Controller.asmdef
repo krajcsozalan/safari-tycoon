@@ -1,9 +1,8 @@
 {
-    "name": "SafariTycoon",
-    "rootNamespace": "SafariTycoon",
+    "name": "SafariTycoon.Controller",
+    "rootNamespace": "SafariTycoon.Controller",
     "references": [
-        "GUID:19c3df1967929405fba735480b3da9a7",
-        "GUID:7512af92bd6df13a987a2f2d113c16b6"
+        "GUID:495c01f91bfc3fbd68b6122dfae7ded5"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
