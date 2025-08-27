@@ -1,0 +1,16 @@
+{
+    "name": "SafariTycoon",
+    "rootNamespace": "SafariTycoon",
+    "references": [
+        "GUID:19c3df1967929405fba735480b3da9a7"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
