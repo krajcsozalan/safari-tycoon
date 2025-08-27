@@ -26,25 +26,25 @@ namespace SafariTycoon.Controller
 {
 	public class WorldController : MonoBehaviour
 	{
-		private CancellationTokenSource m_CancellationTokenSource;
+		public CancellationTokenSource CancellationTokenSource { get; private set; }
 
 		public World World { get; private set; }
 
 		public void Initialize(uint worldSize, uint chunkSize)
 		{
 			World = new World(worldSize, chunkSize);
+
+			CancellationTokenSource = new CancellationTokenSource();
 		}
 
 		public void Generate()
 		{
-			m_CancellationTokenSource = new CancellationTokenSource();
-
-			Task.Run(() => World.GenerateAsync(new WorldGenerator(), m_CancellationTokenSource.Token));
+			Task.Run(() => World.GenerateAsync(new WorldGenerator(), CancellationTokenSource.Token));
 		}
 
 		public void CancelGeneration()
 		{
-			m_CancellationTokenSource.Cancel();
+			CancellationTokenSource?.Cancel();
 		}
 
 		private class WorldGenerator : IWorldGenerator
