@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SafariTycoon.Model
@@ -40,6 +42,17 @@ namespace SafariTycoon.Model
 
 		public void Generate(IWorldGenerator generator)
 		{
+			for (uint i = 0; i < Size; ++i)
+			{
+				for (uint j = 0; j < Size; ++j)
+				{
+					Chunks[i, j].Generate(generator);
+				}
+			}
+		}
+
+		public void GenerateAsync(IWorldGenerator generator, CancellationToken cancellationToken)
+		{
 			Task[] tasks = new Task[Size * Size];
 
 			for (uint i = 0; i < Size; ++i)
@@ -47,11 +60,15 @@ namespace SafariTycoon.Model
 				for (uint j = 0; j < Size; ++j)
 				{
 					Chunk chunk = Chunks[i, j];
-					tasks[Size * i + j] = Task.Run(() => chunk.Generate(generator));
+					tasks[Size * i + j] = Task.Run(() => chunk.Generate(generator), cancellationToken);
 				}
 			}
 
-			Task.WaitAll(tasks);
+			try
+			{
+				Task.WaitAll(tasks, cancellationToken);
+			}
+			catch (OperationCanceledException) { }
 		}
 	}
 }
