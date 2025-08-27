@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+using System;
+using System.Threading;
+
 using UnityEngine;
 
 using SafariTycoon.Controller;
@@ -27,20 +30,45 @@ namespace SafariTycoon.View
 	{
 		private WorldController m_WorldController;
 
+		[Header("References")]
+		[SerializeField] private GameObject m_ChunkPrefab;
+
 		public void OnEnable()
 		{
+			DestroyChildren();
+
 			m_WorldController = GetComponent<WorldController>();
 		}
 
 		public void Generate(uint worldSize, uint chunkSize)
 		{
+			DestroyChildren();
+
 			m_WorldController.Initialize(worldSize, chunkSize);
+
+			if (worldSize > 0)
+			{
+				int count = Convert.ToInt32(worldSize * worldSize);
+				InstantiateParameters parameters = new InstantiateParameters() { parent = transform };
+				CancellationToken cancellationToken = m_WorldController.CancellationTokenSource.Token;
+
+				InstantiateAsync(m_ChunkPrefab, count, parameters, cancellationToken);
+			}
+
 			m_WorldController.Generate();
 		}
 
 		public void CancelGeneration()
 		{
 			m_WorldController.CancelGeneration();
+		}
+
+		private void DestroyChildren()
+		{
+			for (int i = transform.childCount - 1; i >= 0; --i)
+			{
+				DestroyImmediate(transform.GetChild(i).gameObject);
+			}
 		}
 	}
 }

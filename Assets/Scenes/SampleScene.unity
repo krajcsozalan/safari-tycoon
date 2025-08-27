@@ -320,6 +320,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: World
       objectReference: {fileID: 0}
+    - target: {fileID: 3069536000318804396, guid: 473d6b85e7519d88dbbf8a183ed46f64, type: 3}
+      propertyPath: m_ChunkPrefab
+      value: 
+      objectReference: {fileID: 46617026281756158, guid: 1e918c01f22b36543bbf1e1366fdb3b6, type: 3}
     - target: {fileID: 6213525055321173165, guid: 473d6b85e7519d88dbbf8a183ed46f64, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
