@@ -41,9 +41,19 @@ namespace SafariTycoon.View
 			m_ChunkSize = UIntField("Chunk size", m_ChunkSize);
 
 			GUILayout.Space(10);
-			if (!GUILayout.Button("Generate")) return;
+			GUILayout.BeginHorizontal();
 
-			(target as WorldView).Generate(m_WorldSize, m_ChunkSize);
+			if (GUILayout.Button("Generate"))
+			{
+				(target as WorldView).Generate(m_WorldSize, m_ChunkSize);
+			}
+
+			if (GUILayout.Button("Cancel"))
+			{
+				(target as WorldView).CancelGeneration();
+			}
+
+			GUILayout.EndHorizontal();
 		}
 
 		private uint UIntField(string label, uint value, params GUILayoutOption[] options)

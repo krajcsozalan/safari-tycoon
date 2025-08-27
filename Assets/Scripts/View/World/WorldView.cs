@@ -37,5 +37,10 @@ namespace SafariTycoon.View
 			m_WorldController.Initialize(worldSize, chunkSize);
 			m_WorldController.Generate();
 		}
+
+		public void CancelGeneration()
+		{
+			m_WorldController.CancelGeneration();
+		}
 	}
 }
