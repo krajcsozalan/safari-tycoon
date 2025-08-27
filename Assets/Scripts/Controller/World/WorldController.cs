@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+using System.Threading;
+using System.Threading.Tasks;
+
 using UnityEngine;
 
 using SafariTycoon.Model;
@@ -23,6 +26,8 @@ namespace SafariTycoon.Controller
 {
 	public class WorldController : MonoBehaviour
 	{
+		private CancellationTokenSource m_CancellationTokenSource;
+
 		public World World { get; private set; }
 
 		public void Initialize(uint worldSize, uint chunkSize)
@@ -32,7 +37,14 @@ namespace SafariTycoon.Controller
 
 		public void Generate()
 		{
-			World.Generate(new WorldGenerator());
+			m_CancellationTokenSource = new CancellationTokenSource();
+
+			Task.Run(() => World.GenerateAsync(new WorldGenerator(), m_CancellationTokenSource.Token));
+		}
+
+		public void CancelGeneration()
+		{
+			m_CancellationTokenSource.Cancel();
 		}
 
 		private class WorldGenerator : IWorldGenerator
