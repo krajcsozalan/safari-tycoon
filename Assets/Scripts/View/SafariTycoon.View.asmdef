@@ -1,10 +1,9 @@
 {
-    "name": "SafariTycoon",
-    "rootNamespace": "SafariTycoon",
+    "name": "SafariTycoon.View",
+    "rootNamespace": "SafariTycoon.View",
     "references": [
-        "GUID:19c3df1967929405fba735480b3da9a7",
-        "GUID:7512af92bd6df13a987a2f2d113c16b6",
-        "GUID:d61df57d0d1109dc59081c70662fb9c3"
+        "GUID:495c01f91bfc3fbd68b6122dfae7ded5",
+        "GUID:7512af92bd6df13a987a2f2d113c16b6"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
