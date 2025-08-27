@@ -23,7 +23,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
-          coverageOptions: generateHtmlReport;assemblyFilters:-Tests
+          coverageOptions: generateHtmlReport;assemblyFilters:-SafariTycoon.Tests
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
