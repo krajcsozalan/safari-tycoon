@@ -46,16 +46,19 @@ namespace SafariTycoon.View
 
 			m_WorldController.Initialize(worldSize, chunkSize);
 
+			AsyncInstantiateOperation operation = null;
 			if (worldSize > 0)
 			{
 				int count = Convert.ToInt32(worldSize * worldSize);
 				InstantiateParameters parameters = new InstantiateParameters() { parent = transform };
 				CancellationToken cancellationToken = m_WorldController.CancellationTokenSource.Token;
 
-				InstantiateAsync(m_ChunkPrefab, count, parameters, cancellationToken);
+				operation = InstantiateAsync(m_ChunkPrefab, count, parameters, cancellationToken);
 			}
 
 			m_WorldController.Generate();
+
+			operation?.WaitForCompletion();
 		}
 
 		public void CancelGeneration()
